@@ -42,11 +42,11 @@ except FileNotFoundError:
 
 #UI파일 연결
 #단, UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다.
-form_class = uic.loadUiType("nwichat.ui")[0]
+form_class = uic.loadUiType("AIchat.ui")[0]
 
 
 #화면을 띄우는데 사용되는 Class 선언
-class WindowClass(QMainWindow, form_class) :
+class WindowClass(QMaiAI_Service_ndow, form_class) :
 
 
     na_flag=False
@@ -61,8 +61,8 @@ class WindowClass(QMainWindow, form_class) :
         self.setupUi(self)
         self.start.clicked.connect(self.start_b)
         self.confirm.clicked.connect(self.printTextFunction)
-        self.nwidb_download.clicked.connect(self.download_privacy)
-        self.nwichat_download.clicked.connect(self.download_chatdb)
+        self.AI_Service_db_download.clicked.connect(self.download_privacy)
+        self.AI_Service_chat_download.clicked.connect(self.download_chatdb)
         self.end.clicked.connect(QCoreApplication.instance().quit)
         self.citizenimage.setPixmap(QPixmap("citizen.png"))
         self.citizenimage.setScaledContents(True) 
@@ -73,8 +73,8 @@ class WindowClass(QMainWindow, form_class) :
 
         conn = pymysql.connect(host='localhost', user='root', password='', charset='utf8') 
         cursor = conn.cursor()
-        sql = """select max(category) from nwichatdb;"""
-        sql1 = 'use NWICHAT'
+        sql = """select max(category) from AI_Service_chatdb;"""
+        sql1 = 'use AI_Service_CHAT'
         cursor.execute(sql1)
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -92,41 +92,41 @@ class WindowClass(QMainWindow, form_class) :
     def download_privacy(self):
         conn = pymysql.connect(host='localhost', user='root', password='', charset='utf8') 
         cursor = conn.cursor() 
-        sql1 = 'use NWICHAT'
+        sql1 = 'use AI_Service_CHAT'
         sql = """ 
-            SELECT * FROM nwidb;
+            SELECT * FROM AI_Service_db;
         """ 
         cursor.execute(sql1)
         cursor.execute(sql)
         result = cursor.fetchall()
         df = pd.DataFrame(result)
         df.columns=['id','name','phonenum','address','carnum','date','category']
-        df.to_excel('nwichat_privacyDB.xlsx')
+        df.to_excel('AI_Service_chat_privacyDB.xlsx')
 
 
     def download_chatdb(self):
-        conn = pymysql.connect(host='localhost', user='root', password='0000', charset='utf8') 
+        conn = pymysql.connect(host='localhost', user='root', password='', charset='utf8') 
         cursor = conn.cursor() 
-        sql1 = 'use NWICHAT'
+        sql1 = 'use AI_Service_CHAT'
         sql = """ 
-            SELECT * FROM nwichatdb;
+            SELECT * FROM AI_Service_chatdb;
         """
         cursor.execute(sql1)
         cursor.execute(sql)
         result = cursor.fetchall()
         df = pd.DataFrame(result)
         df.columns=['id','user','chatbot','date','category']
-        df.to_excel('nwichat_dialogDB.xlsx')
+        df.to_excel('AI_Service_chat_dialogDB.xlsx')
 
 
 
     def printTextFunction(self) :
-        self.NZChatbot()
+        self.AI_Service_bot()
     
     def start_b(self) :
         self.c_f="행정민원 접수 및 질의응답 AI 상담사 입니다. 무엇을 도와드릴까요?"
-        self.nwichat_text.setText("AI Counselor : "+self.c_f)
-        self.nwichat_text.setWordWrap(True)
+        self.AI_Service_chat_text.setText("AI Counselor : "+self.c_f)
+        self.AI_Service_chat_text.setWordWrap(True)
         self.GoogleTTS(self.c_f)          
     
  
@@ -146,13 +146,13 @@ class WindowClass(QMainWindow, form_class) :
             f=open('dataset/carnumber.txt','r')
             car_data=f.readline()
             self.c_f=('네, '+car_data+" 차량 신고 맞으신가요? 맞으시다면 시민님, 성함은 어떻게 되시나요? 이름은 단어로 시작해주세요")
-            self.nwichat_text.setText("AI Counselor : "+self.c_f)
-            self.nwichat_text.setWordWrap(True)
+            self.AI_Service_chat_text.setText("AI Counselor : "+self.c_f)
+            self.AI_Service_chat_text.setWordWrap(True)
             self.GoogleTTS(self.c_f)
         except AttributeError:
             self.c_f="잘 못 알아 들었어요, 다시 말씀해주시겠어요?"
-            self.nwichat_text.setText("AI Counselor : "+self.c_f)
-            self.nwichat_text.setWordWrap(True)
+            self.AI_Service_chat_text.setText("AI Counselor : "+self.c_f)
+            self.AI_Service_chat_text.setWordWrap(True)
             self.GoogleTTS(self.c_f)
 
        
@@ -175,15 +175,15 @@ class WindowClass(QMainWindow, form_class) :
                 f=open('dataset/name.txt','r')
                 name_data=f.readline()
                 self.c_f=('네, '+name_data+" 님 맞으신가요? 맞으시다면 시민님 휴대폰 번호는 어떻게 되시나요?")
-                self.nwichat_text.setText("AI Counselor : "+self.c_f)
-                self.nwichat_text.setWordWrap(True)
+                self.AI_Service_chat_text.setText("AI Counselor : "+self.c_f)
+                self.AI_Service_chat_text.setWordWrap(True)
                 self.GoogleTTS(self.c_f)
             except AttributeError as a:
                 i+=1
         '''
         self.c_f="잘 못 알아 들었어요, 다시 말씀해주시겠어요?"
-        self.nwichat_text.setText("챗봇 : "+self.c_f)
-        self.nwichat_text.setWordWrap(True)
+        self.AI_Service_chat_text.setText("챗봇 : "+self.c_f)
+        self.AI_Service_chat_text.setWordWrap(True)
         self.GoogleTTS(self.c_f)
         '''
                 
@@ -203,13 +203,13 @@ class WindowClass(QMainWindow, form_class) :
             f=open('dataset/phonenumber.txt','r')
             phone_data=f.readline()
             self.c_f=('네, '+phone_data+" 맞으신가요? 맞으시다면 신고하시고자 하시는 곳 주소 불러주시겠습니까?")
-            self.nwichat_text.setText("AI Counselor: "+self.c_f)
-            self.nwichat_text.setWordWrap(True)
+            self.AI_Service_chat_text.setText("AI Counselor: "+self.c_f)
+            self.AI_Service_chat_text.setWordWrap(True)
             self.GoogleTTS(self.c_f)
         except AttributeError:
             self.c_f="잘 못 알아 들었어요, 다시 말씀해주시겠어요?"
-            self.nwichat_text.setText("AI Counselor: "+self.c_f)
-            self.nwichat_text.setWordWrap(True)
+            self.AI_Service_chat_text.setText("AI Counselor: "+self.c_f)
+            self.AI_Service_chat_text.setWordWrap(True)
             self.GoogleTTS(self.c_f)
 
 
@@ -228,19 +228,19 @@ class WindowClass(QMainWindow, form_class) :
             f=open('dataset/address.txt','r')
             address_data=f.readline()
             self.c_f=('네, '+address_data+"로 접수 도와드리겠습니다. 감사합니다. 더 신고하실 사항 있으신가요?")
-            self.nwichat_text.setText("AI Counselor : "+self.c_f)
-            self.nwichat_text.setWordWrap(True)
+            self.AI_Service_chat_text.setText("AI Counselor : "+self.c_f)
+            self.AI_Service_chat_text.setWordWrap(True)
             self.GoogleTTS(self.c_f)
         except AttributeError:
             self.c_f="잘 못 알아 들었어요, 다시 말씀해주시겠어요?"
-            self.nwichat_text.setText("AI Counselor : "+self.c_f)
-            self.nwichat_text.setWordWrap(True)
+            self.AI_Service_chat_text.setText("AI Counselor : "+self.c_f)
+            self.AI_Service_chat_text.setWordWrap(True)
             self.GoogleTTS(self.c_f)
 
 
         return self.c_f
 
-    def NZChatbot(self):
+    def AI_Service_bot(self):
         global na_flag, car_flag, ph_flag, add_flag
         chatbot_flag =True
         
@@ -290,8 +290,8 @@ class WindowClass(QMainWindow, form_class) :
             chatbot_flag=False
         if self.text in con_list:
             self.c_f="네, 그럼 추가로 신고하실 내용 말씀해 주시겠습니까?"
-            self.nwichat_text.setText("AAI Counselor : "+self.c_f)
-            self.nwichat_text.setWordWrap(True)
+            self.AI_Service_chat_text.setText("AAI Counselor : "+self.c_f)
+            self.AI_Service_chat_text.setWordWrap(True)
             self.GoogleTTS(self.c_f)
             chatbot_flag=False
                 #pass
@@ -299,8 +299,8 @@ class WindowClass(QMainWindow, form_class) :
 
             if self.text == '아니요':
                 self.c_f="네, 그럼 다시 말씀해 주시겠습니까?"
-                self.nwichat_text.setText("AI Counselor : "+self.c_f)
-                self.nwichat_text.setWordWrap(True)
+                self.AI_Service_chat_text.setText("AI Counselor : "+self.c_f)
+                self.AI_Service_chat_text.setWordWrap(True)
                 self.GoogleTTS(self.c_f)
             else:
                 try:
@@ -329,33 +329,33 @@ class WindowClass(QMainWindow, form_class) :
 
                     if topic=='불법 주정차 신고':
                         self.c_f = '네, 불법 주정차 신고 도와 드릴게요, 차량 번호 불러 주시겠어요?'
-                        self.nwichat_text.setText("AI Counselor : "+self.c_f)
-                        self.nwichat_text.setWordWrap(True)
+                        self.AI_Service_chat_text.setText("AI Counselor : "+self.c_f)
+                        self.AI_Service_chat_text.setWordWrap(True)
                         self.GoogleTTS(self.c_f)
-                        self.NZDBChat(self.text,self.c_f,self.cate)
+                        self.AI_DBChat(self.text,self.c_f,self.cate)
                         na_flag=False
                         ph_flag=False
                         add_flag=False
                         car_flag=True
                     elif topic=='차량번호 추출':
                         self.s_t= self.collect_carnumber(self.text)
-                        self.NZDBChat(self.text,self.s_t,self.cate)
+                        self.AI_DBChat(self.text,self.s_t,self.cate)
                         na_flag=True
                         ph_flag=False
                         add_flag=False
                         car_flag=False
                     elif topic=='전화번호 추출': 
                         self.s_t = self.collect_phonenumber(self.text)
-                        self.NZDBChat(self.text,self.s_t,self.cate)
+                        self.AI_DBChat(self.text,self.s_t,self.cate)
                         na_flag=False
                         ph_flag=False
                         add_flag=True
                         car_flag=False
                     elif topic == '주소 추출':
                         self.s_t = self.collect_address(self.text,)
-                        self.NZDBChat(self.text,self.s_t,self.cate)
+                        self.AI_DBChat(self.text,self.s_t,self.cate)
                         try:
-                            self.NZDB(self.cate)
+                            self.AI_DB(self.cate)
                         except FileNotFoundError:
                             pass
                         na_flag=False
@@ -364,7 +364,7 @@ class WindowClass(QMainWindow, form_class) :
                         car_flag=False
                     elif topic =='이름 추출':
                         self.s_t = self.collect_name(self.text)
-                        self.NZDBChat(self.text,self.s_t,self.cate)
+                        self.AI_DBChat(self.text,self.s_t,self.cate)
                         na_flag=False
                         ph_flag=True
                         add_flag=False
@@ -375,54 +375,54 @@ class WindowClass(QMainWindow, form_class) :
                         try:
                             if (car_flag==True) and (na_flag==False) and (add_flag==False) and (ph_flag==False) :
                                 self.c_f = self.s_t+'시민님, 접수를 위해 차량 번호 불러 주시겠어요?'
-                                self.nwichat_text.setText("AI Counselor: "+self.c_f)
-                                self.nwichat_text.setWordWrap(True)
+                                self.AI_Service_chat_text.setText("AI Counselor: "+self.c_f)
+                                self.AI_Service_chat_text.setWordWrap(True)
                                 self.GoogleTTS(self.c_f)
-                                self.NZDBChat(self.text,self.c_f,self.cate)
+                                self.AI_DBChat(self.text,self.c_f,self.cate)
                     
                             elif (na_flag==True) and (car_flag==False) and (add_flag==False) and (ph_flag==False) :
                                 self.c_f =  self.s_t+'시민님, 접수를 위해 성함 불러 주시겠어요? 이름은 단어로 시작해주세요'
-                                self.nwichat_text.setText("AI 상담사 : "+self.c_f)
-                                self.nwichat_text.setWordWrap(True)
+                                self.AI_Service_chat_text.setText("AI 상담사 : "+self.c_f)
+                                self.AI_Service_chat_text.setWordWrap(True)
                                 self.GoogleTTS(self.c_f)
-                                self.NZDBChat(self.text,self.c_f,self.cate)
+                                self.AI_DBChat(self.text,self.c_f,self.cate)
 
                             elif (ph_flag==True)and (na_flag==False) and (car_flag==False) and (add_flag==False)  :
                                 self.c_f =  self.s_t+'시민님, 접수를 위해 휴대폰번호 불러 주시겠어요?'
-                                self.nwichat_text.setText("AI 상담사 : "+ self.c_f)
-                                self.nwichat_text.setWordWrap(True)
+                                self.AI_Service_chat_text.setText("AI 상담사 : "+ self.c_f)
+                                self.AI_Service_chat_text.setWordWrap(True)
                                 self.GoogleTTS(self.c_f)
-                                self.NZDBChat(self.text,self.c_f,self.cate)
+                                self.AI_DBChat(self.text,self.c_f,self.cate)
                             elif (add_flag==True)and (ph_flag==False)and (na_flag==False) and (car_flag==False)  :
                                 self.c_f =  self.s_t+'시민님, 접수를 위해 신고하시고자 하는 주소 불러 주시겠어요?'
-                                self.nwichat_text.setText("AI 상담사 : "+self.c_f)
-                                self.nwichat_text.setWordWrap(True)
+                                self.AI_Service_chat_text.setText("AI 상담사 : "+self.c_f)
+                                self.AI_Service_chat_text.setWordWrap(True)
                                 self.GoogleTTS(self.c_f)
-                                self.NZDBChat(self.text,self.c_f,self.cate)
+                                self.AI_DBChat(self.text,self.c_f,self.cate)
                             else:
-                                self.nwichat_text.setText("AI 상담사 : "+self.s_t)
-                                self.NZDBChat(self.text,self.s_t,self.cate)
+                                self.AI_Service_chat_text.setText("AI 상담사 : "+self.s_t)
+                                self.AI_DBChat(self.text,self.s_t,self.cate)
                                 self.GoogleTTS(self.s_t)
                         except NameError:
-                            self.nwichat_text.setText("AI 상담사 : "+self.s_t)
-                            self.NZDBChat(self.text,self.s_t,self.cate)
+                            self.AI_Service_chat_text.setText("AI 상담사 : "+self.s_t)
+                            self.AI_DBChat(self.text,self.s_t,self.cate)
                             self.GoogleTTS(self.s_t)
 
                 except ValueError:
                     self.c_f="잘 못알아 들었어요, 다시 말씀해주시겠어요?"
-                    self.nwichat_text.setText("AI 상담사 : "+self.c_f)
-                    self.nwichat_text.setWordWrap(True)
+                    self.AI_Service_chat_text.setText("AI 상담사 : "+self.c_f)
+                    self.AI_Service_chat_text.setWordWrap(True)
                     self.GoogleTTS(self.c_f)
                 
 
 
         else:
             self.c_f="네, 지금까지  AI 상담사 이였습니다. 감사합니다."
-            self.nwichat_text.setText("AI 상담사 : "+self.c_f)
-            self.nwichat_text.setWordWrap(True)
+            self.AI_Service_chat_text.setText("AI 상담사 : "+self.c_f)
+            self.AI_Service_chat_text.setWordWrap(True)
             self.GoogleTTS(self.c_f)
         
-    def NZDBChat(self,u_t,s_t,cate):
+    def AI_DBChat(self,u_t,s_t,cate):
         d = datetime.datetime.now()
         conn = pymysql.connect(host='localhost', user='root', password='', charset='utf8') 
         cursor = conn.cursor() 
@@ -432,8 +432,8 @@ class WindowClass(QMainWindow, form_class) :
         s= s_t
         ca=cate
 
-        sql1 = 'use NWICHAT'
-        sql2 = """INSERT INTO nwichatdb (user, chatbot, date, category) VALUES (%s,%s,%s,%s);"""
+        sql1 = 'use AI_Service_CHAT'
+        sql2 = """INSERT INTO AI_Service_chatdb (user, chatbot, date, category) VALUES (%s,%s,%s,%s);"""
 
         val2 = (u,s,d,ca)
         cursor.execute(sql1)
@@ -443,7 +443,7 @@ class WindowClass(QMainWindow, form_class) :
         conn.commit() 
         conn.close() 
 
-    def NZDB(self,cate):
+    def AI_DB(self,cate):
         d = datetime.datetime.now()
         conn = pymysql.connect(host='localhost', user='root', password='', charset='utf8') 
         cursor = conn.cursor() 
@@ -466,9 +466,9 @@ class WindowClass(QMainWindow, form_class) :
         c=c_f.readline()
         c_f.close()
 
-        sql1 = 'use NWICHAT'
+        sql1 = 'use AI_Service_CHAT'
 
-        sql = """INSERT INTO nwidb (name, phonenum, address, carnum, date, category) VALUES (%s,%s,%s,%s,%s,%s);"""
+        sql = """INSERT INTO AI_Service_db (name, phonenum, address, carnum, date, category) VALUES (%s,%s,%s,%s,%s,%s);"""
 
 
         val = (n,p,a,c,d,ca)
